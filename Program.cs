@@ -2,6 +2,8 @@
 {
     internal class Program
     {
+        private static SemaphoreSlim sem;
+
         private static bool HasTrailingBlanks(string file_path)
         {
             using var file = File.OpenText(file_path);
@@ -53,21 +55,25 @@
         {
             Console.WriteLine($"Processing directory: {directoryPath}");
 
-            foreach (var file_path in Directory.EnumerateFiles(directoryPath, "*", SearchOption.AllDirectories))
+            Parallel.ForEach(Directory.EnumerateFiles(directoryPath, "*", SearchOption.AllDirectories), file_path =>
             {
                 string file_ext = Path.GetExtension(file_path).ToLower();
                 if (allowed_exts.Contains(file_ext))
                 {
                     RemoveTrailingBlanks(file_path);
+                    sem.Wait();
                     Console.WriteLine(Path.GetRelativePath(directoryPath, file_path));
+                    sem.Release();
                 }
-            }
+            });
         }
 
         static void Main(string[] args)
         {
             var start = DateTime.Now;
             HashSet<string> allowed_exts;
+
+            sem = new(1);
 
             if (args.Length > 0)
             {
