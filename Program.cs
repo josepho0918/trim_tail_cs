@@ -28,7 +28,7 @@
                 end_with_newline = (orig_file.Peek() == '\n');
             }
 
-            string temp_path = Path.Combine(Path.GetTempPath(), Path.GetFileName(file_path) + ".tmp");
+            string temp_path = Path.GetTempFileName();
             using (var orig_file = File.OpenText(file_path))
             using (var temp_file = File.CreateText(temp_path))
             {
