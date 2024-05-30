@@ -1,4 +1,4 @@
-﻿namespace CppTidy
+﻿namespace TrimTail
 {
     internal class Program
     {

@@ -10,7 +10,7 @@
     <Copyright>Copyright (C) 2024</Copyright>
     <Description>A C# tool for cleaning trailing spaces in code files.</Description>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <RepositoryUrl>https://github.com/josepho0918/cpp_tidy_cs.git</RepositoryUrl>
+    <RepositoryUrl>https://github.com/josepho0918/trim_tail_cs.git</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>

@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.34916.146
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CppTidy", "CppTidy.csproj", "{3704C828-DB91-4EAF-9D60-ECC88D1C4272}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrimTail", "TrimTail.csproj", "{3704C828-DB91-4EAF-9D60-ECC88D1C4272}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
