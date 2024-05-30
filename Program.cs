@@ -50,11 +50,11 @@
             File.Replace(temp_path, file_path, null);
         }
 
-        private static void ProcessDir(string directoryPath, HashSet<string> allowed_exts)
+        private static void ProcessDir(string dir_path, HashSet<string> allowed_exts)
         {
-            Console.WriteLine($"Processing directory: {directoryPath}");
+            Console.WriteLine($"Processing directory: {dir_path}");
 
-            var files = Directory.EnumerateFiles(directoryPath, "*", SearchOption.AllDirectories)
+            var files = Directory.EnumerateFiles(dir_path, "*", SearchOption.AllDirectories)
                 .AsParallel()
                 .Where(file_path => allowed_exts.Contains(Path.GetExtension(file_path).ToLower()));
 
@@ -62,7 +62,7 @@
             {
                 RemoveTrailingBlanks(file_path);
                 sem.Wait();
-                Console.WriteLine(Path.GetRelativePath(directoryPath, file_path));
+                Console.WriteLine(Path.GetRelativePath(dir_path, file_path));
                 sem.Release();
             });
         }
