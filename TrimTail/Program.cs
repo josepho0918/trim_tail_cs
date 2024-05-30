@@ -1,10 +1,10 @@
 ﻿namespace TrimTail
 {
-    internal class Program
+    public class Program
     {
         private static readonly SemaphoreSlim sem = new(1);
 
-        private static bool HasTrailingBlanks(in string file_path)
+        public static bool HasTrailingBlanks(in string file_path)
         {
             using var file = File.OpenText(file_path);
             string? line;
@@ -19,7 +19,7 @@
             return false;
         }
 
-        private static void RemoveTrailingBlanks(in string file_path)
+        public static void RemoveTrailingBlanks(in string file_path)
         {
             if (!HasTrailingBlanks(file_path)) return;
 
@@ -47,10 +47,18 @@
                     }
                 }
             }
-            File.Replace(temp_path, file_path, null);
+            try
+            {
+                File.Replace(temp_path, file_path, null);
+            }
+            catch (IOException)
+            {
+                File.Copy(temp_path, file_path, true);
+                File.Delete(temp_path);
+            }
         }
 
-        private static void ProcessDir(string dir_path, HashSet<string> allowed_exts)
+        public static void ProcessDir(string dir_path, HashSet<string> allowed_exts)
         {
             Console.WriteLine($"Processing directory: {dir_path}");
 
