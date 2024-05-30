@@ -28,7 +28,7 @@
             using (var temp_file = File.CreateText(temp_path))
             {
                 orig_file.BaseStream.Seek(-1, SeekOrigin.End);
-                bool end_with_newline = (orig_file.Peek() == '\n');
+                bool end_with_newline = (orig_file.BaseStream.ReadByte() == '\n');
 
                 orig_file.BaseStream.Seek(0, SeekOrigin.Begin);
                 orig_file.DiscardBufferedData();
