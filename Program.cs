@@ -23,17 +23,16 @@
         {
             if (!HasTrailingBlanks(file_path)) return;
 
-            bool end_with_newline = false;
-            using (var orig_file = File.OpenText(file_path))
-            {
-                orig_file.BaseStream.Seek(-1, SeekOrigin.End);
-                end_with_newline = (orig_file.Peek() == '\n');
-            }
-
             string temp_path = Path.GetTempFileName();
             using (var orig_file = File.OpenText(file_path))
             using (var temp_file = File.CreateText(temp_path))
             {
+                orig_file.BaseStream.Seek(-1, SeekOrigin.End);
+                bool end_with_newline = (orig_file.Peek() == '\n');
+
+                orig_file.BaseStream.Seek(0, SeekOrigin.Begin);
+                orig_file.DiscardBufferedData();
+
                 string? line;
                 while ((line = orig_file.ReadLine()) != null)
                 {
