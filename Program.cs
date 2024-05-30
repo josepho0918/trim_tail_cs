@@ -54,16 +54,16 @@
         {
             Console.WriteLine($"Processing directory: {directoryPath}");
 
-            Parallel.ForEach(Directory.EnumerateFiles(directoryPath, "*", SearchOption.AllDirectories), file_path =>
+            var files = Directory.EnumerateFiles(directoryPath, "*", SearchOption.AllDirectories)
+                .AsParallel()
+                .Where(file_path => allowed_exts.Contains(Path.GetExtension(file_path).ToLower()));
+
+            Parallel.ForEach(files, file_path =>
             {
-                string file_ext = Path.GetExtension(file_path).ToLower();
-                if (allowed_exts.Contains(file_ext))
-                {
-                    RemoveTrailingBlanks(file_path);
-                    sem.Wait();
-                    Console.WriteLine(Path.GetRelativePath(directoryPath, file_path));
-                    sem.Release();
-                }
+                RemoveTrailingBlanks(file_path);
+                sem.Wait();
+                Console.WriteLine(Path.GetRelativePath(directoryPath, file_path));
+                sem.Release();
             });
         }
 
