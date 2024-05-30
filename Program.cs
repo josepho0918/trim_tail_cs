@@ -2,7 +2,7 @@
 {
     internal class Program
     {
-        private static SemaphoreSlim sem;
+        private static readonly SemaphoreSlim sem = new(1);
 
         private static bool HasTrailingBlanks(string file_path)
         {
@@ -72,8 +72,6 @@
         {
             var start = DateTime.Now;
             HashSet<string> allowed_exts;
-
-            sem = new(1);
 
             if (args.Length > 0)
             {
