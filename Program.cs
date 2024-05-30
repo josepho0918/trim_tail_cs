@@ -4,7 +4,7 @@
     {
         private static readonly SemaphoreSlim sem = new(1);
 
-        private static bool HasTrailingBlanks(string file_path)
+        private static bool HasTrailingBlanks(in string file_path)
         {
             using var file = File.OpenText(file_path);
             string? line;
@@ -19,7 +19,7 @@
             return false;
         }
 
-        private static void RemoveTrailingBlanks(string file_path)
+        private static void RemoveTrailingBlanks(in string file_path)
         {
             if (!HasTrailingBlanks(file_path)) return;
 
