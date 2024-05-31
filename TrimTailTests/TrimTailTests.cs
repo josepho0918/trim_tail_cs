@@ -10,6 +10,10 @@ namespace TrimTailTests
         {
             const string filePath = "test.txt";
 
+            File.WriteAllText(filePath, "    ");
+            Assert.IsTrue(Program.HasTrailingBlanks(filePath));
+            File.Delete(filePath);
+
             File.WriteAllText(filePath, "Test w/ trailing spaces    ");
             Assert.IsTrue(Program.HasTrailingBlanks(filePath));
             File.Delete(filePath);
