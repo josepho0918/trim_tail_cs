@@ -4,10 +4,8 @@ public class Program
 {
     private static readonly SemaphoreSlim sem = new(1);
 
-    public static bool HasTrailingBlanks(in string filePath)
-    {
-        return File.ReadLines(filePath).Any(line => !string.IsNullOrEmpty(line) && char.IsWhiteSpace(line[^1]));
-    }
+    public static bool HasTrailingBlanks(in string filePath) =>
+        File.ReadLines(filePath).Any(line => !string.IsNullOrEmpty(line) && char.IsWhiteSpace(line[^1]));
 
     public static void RemoveTrailingBlanks(in string filePath)
     {
