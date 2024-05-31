@@ -6,9 +6,7 @@
 
         public static bool HasTrailingBlanks(in string filePath)
         {
-            using var file = File.OpenText(filePath);
-            string? line;
-            while ((line = file.ReadLine()) != null)
+            foreach (var line in File.ReadLines(filePath))
             {
                 if (!string.IsNullOrEmpty(line) && char.IsWhiteSpace(line[^1]))
                 {
@@ -23,7 +21,7 @@
         {
             if (!HasTrailingBlanks(filePath)) return;
 
-            string tempPath = Path.GetTempFileName();
+            var tempPath = Path.GetTempFileName();
             using (var origFile = File.OpenText(filePath))
             using (var tempFile = File.CreateText(tempPath))
             {
