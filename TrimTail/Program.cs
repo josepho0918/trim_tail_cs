@@ -4,9 +4,9 @@
     {
         private static readonly SemaphoreSlim sem = new(1);
 
-        public static bool HasTrailingBlanks(in string file_path)
+        public static bool HasTrailingBlanks(in string filePath)
         {
-            using var file = File.OpenText(file_path);
+            using var file = File.OpenText(filePath);
             string? line;
             while ((line = file.ReadLine()) != null)
             {
@@ -19,58 +19,58 @@
             return false;
         }
 
-        public static void RemoveTrailingBlanks(in string file_path)
+        public static void RemoveTrailingBlanks(in string filePath)
         {
-            if (!HasTrailingBlanks(file_path)) return;
+            if (!HasTrailingBlanks(filePath)) return;
 
-            string temp_path = Path.GetTempFileName();
-            using (var orig_file = File.OpenText(file_path))
-            using (var temp_file = File.CreateText(temp_path))
+            string tempPath = Path.GetTempFileName();
+            using (var origFile = File.OpenText(filePath))
+            using (var tempFile = File.CreateText(tempPath))
             {
-                orig_file.BaseStream.Seek(-1, SeekOrigin.End);
-                bool end_with_newline = (orig_file.BaseStream.ReadByte() == '\n');
+                origFile.BaseStream.Seek(-1, SeekOrigin.End);
+                bool endWithNewline = (origFile.BaseStream.ReadByte() == '\n');
 
-                orig_file.BaseStream.Seek(0, SeekOrigin.Begin);
-                orig_file.DiscardBufferedData();
+                origFile.BaseStream.Seek(0, SeekOrigin.Begin);
+                origFile.DiscardBufferedData();
 
                 string? line;
-                while ((line = orig_file.ReadLine()) != null)
+                while ((line = origFile.ReadLine()) != null)
                 {
                     line = line.TrimEnd();
-                    if (!orig_file.EndOfStream || end_with_newline)
+                    if (!origFile.EndOfStream || endWithNewline)
                     {
-                        temp_file.WriteLine(line);
+                        tempFile.WriteLine(line);
                     }
                     else
                     {
-                        temp_file.Write(line);
+                        tempFile.Write(line);
                     }
                 }
             }
             try
             {
-                File.Replace(temp_path, file_path, null);
+                File.Replace(tempPath, filePath, null);
             }
             catch (IOException)
             {
-                File.Copy(temp_path, file_path, true);
-                File.Delete(temp_path);
+                File.Copy(tempPath, filePath, true);
+                File.Delete(tempPath);
             }
         }
 
-        public static void ProcessDir(string dir_path, HashSet<string> allowed_exts)
+        public static void ProcessDir(string dirPath, HashSet<string> allowedExts)
         {
-            Console.WriteLine($"Processing directory: {dir_path}");
+            Console.WriteLine($"Processing directory: {dirPath}");
 
-            var files = Directory.EnumerateFiles(dir_path, "*", SearchOption.AllDirectories)
+            var files = Directory.EnumerateFiles(dirPath, "*", SearchOption.AllDirectories)
                 .AsParallel()
-                .Where(file_path => allowed_exts.Contains(Path.GetExtension(file_path).ToLower()));
+                .Where(filePath => allowedExts.Contains(Path.GetExtension(filePath).ToLower()));
 
-            Parallel.ForEach(files, file_path =>
+            Parallel.ForEach(files, filePath =>
             {
-                RemoveTrailingBlanks(file_path);
+                RemoveTrailingBlanks(filePath);
                 sem.Wait();
-                Console.WriteLine(Path.GetRelativePath(dir_path, file_path));
+                Console.WriteLine(Path.GetRelativePath(dirPath, filePath));
                 sem.Release();
             });
         }
@@ -78,18 +78,18 @@
         static void Main(string[] args)
         {
             var start = DateTime.Now;
-            HashSet<string> allowed_exts;
+            HashSet<string> allowedExts;
 
             if (args.Length > 0)
             {
-                allowed_exts = args.Select(x => x.ToLower()).ToHashSet();
+                allowedExts = args.Select(x => x.ToLower()).ToHashSet();
             }
             else
             {
-                allowed_exts = [".h", ".c", ".hpp", ".cpp"];
+                allowedExts = [".h", ".c", ".hpp", ".cpp"];
             }
 
-            ProcessDir(Directory.GetCurrentDirectory(), allowed_exts);
+            ProcessDir(Directory.GetCurrentDirectory(), allowedExts);
 
             var end = DateTime.Now;
             var duration = (end - start).TotalMilliseconds;
