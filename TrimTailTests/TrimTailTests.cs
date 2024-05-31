@@ -5,11 +5,11 @@ namespace TrimTailTests
     [TestClass]
     public class TrimTailTests
     {
+        const string filePath = "test.txt";
+
         [TestMethod]
         public void TestHasTrailingBlanks()
         {
-            const string filePath = "test.txt";
-
             File.WriteAllText(filePath, "    ");
             Assert.IsTrue(Program.HasTrailingBlanks(filePath));
             File.Delete(filePath);
@@ -30,19 +30,14 @@ namespace TrimTailTests
         [TestMethod]
         public void TestRemoveTrailingBlanks()
         {
-            const string filePath = "test.txt";
-            string content;
-
             File.WriteAllText(filePath, "Test w/ trailing blanks    ");
             Program.RemoveTrailingBlanks(filePath);
-            content = File.ReadAllText(filePath);
-            Assert.AreEqual("Test w/ trailing blanks", content);
+            Assert.AreEqual("Test w/ trailing blanks", File.ReadAllText(filePath));
             File.Delete(filePath);
 
             File.WriteAllText(filePath, "Test w/ trailing blanks and newline    \r\n");
             Program.RemoveTrailingBlanks(filePath);
-            content = File.ReadAllText(filePath);
-            Assert.AreEqual("Test w/ trailing blanks and newline\r\n", content);
+            Assert.AreEqual("Test w/ trailing blanks and newline\r\n", File.ReadAllText(filePath));
             File.Delete(filePath);
         }
 
