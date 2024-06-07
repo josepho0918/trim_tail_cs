@@ -21,8 +21,7 @@ public class Program
             origFile.BaseStream.Seek(0, SeekOrigin.Begin);
             origFile.DiscardBufferedData();
 
-            string? line;
-            while ((line = origFile.ReadLine()) != null)
+            for (string? line; (line = origFile.ReadLine()) != null;)
             {
                 line = line.TrimEnd();
                 if (!origFile.EndOfStream || endWithNewline)
