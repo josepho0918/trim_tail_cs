@@ -51,7 +51,7 @@ public class Program
 
         var files = Directory.EnumerateFiles(dirPath, "*", SearchOption.AllDirectories)
             .AsParallel()
-            .Where(filePath => allowedExts.Contains(Path.GetExtension(filePath).ToLower()));
+            .Where(filePath => allowedExts.Contains(Path.GetExtension(filePath).ToLowerInvariant()));
 
         Parallel.ForEach(files, filePath =>
         {
@@ -69,7 +69,7 @@ public class Program
 
         if (args.Length > 0)
         {
-            allowedExts = args.Select(x => x.ToLower()).ToHashSet();
+            allowedExts = args.Select(x => x.ToLowerInvariant()).ToHashSet();
         }
         else
         {
