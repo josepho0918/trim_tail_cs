@@ -50,7 +50,6 @@ public class Program
         Console.WriteLine($"Processing directory: {dirPath}");
 
         var files = Directory.EnumerateFiles(dirPath, "*", SearchOption.AllDirectories)
-            .AsParallel()
             .Where(filePath => allowedExts.Contains(Path.GetExtension(filePath).ToLowerInvariant()));
 
         Parallel.ForEach(files, filePath =>
