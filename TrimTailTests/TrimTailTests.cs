@@ -39,6 +39,11 @@ public class TrimTailTests
         Program.RemoveTrailingBlanks(filePath);
         Assert.AreEqual("Test w/ trailing blanks and newline\r\n", File.ReadAllText(filePath));
         File.Delete(filePath);
+
+        File.WriteAllText(filePath, "Test w/ trailing blanks    \r\nand multiple lines    \r\n");
+        Program.RemoveTrailingBlanks(filePath);
+        Assert.AreEqual("Test w/ trailing blanks\r\nand multiple lines\r\n", File.ReadAllText(filePath));
+        File.Delete(filePath);
     }
 
     [TestMethod]
