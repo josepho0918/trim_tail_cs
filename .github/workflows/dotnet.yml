@@ -9,14 +9,13 @@ on:
   pull_request:
     branches: [ "main" ]
 
+env:
+  BUILD_CONFIGURATION: Release
+
 jobs:
   build:
 
     runs-on: windows-latest
-
-    strategy:
-      matrix:
-        configuration: [Debug, Release]
 
     steps:
     - uses: actions/checkout@v4
@@ -27,6 +26,6 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
-      run: dotnet build --configuration ${{ matrix.configuration }} --no-restore
+      run: dotnet build --configuration ${{ env.BUILD_CONFIGURATION }} --no-restore
     - name: Test
-      run: dotnet test --configuration ${{ matrix.configuration }} --no-build --verbosity normal
+      run: dotnet test --configuration ${{ env.BUILD_CONFIGURATION }} --no-build --verbosity normal
