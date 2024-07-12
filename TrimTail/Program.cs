@@ -1,6 +1,6 @@
 ﻿namespace TrimTail;
 
-public class Program
+public static class Program
 {
     private static readonly SemaphoreSlim sem = new(1);
 
@@ -11,7 +11,7 @@ public class Program
     {
         if (!HasTrailingBlanks(filePath)) return;
 
-        var tempPath = Path.GetTempFileName();
+        var tempPath = Path.GetRandomFileName();
         using (var origFile = File.OpenText(filePath))
         using (var tempFile = File.CreateText(tempPath))
         {
@@ -23,14 +23,14 @@ public class Program
 
             for (string? line; (line = origFile.ReadLine()) != null;)
             {
-                line = line.TrimEnd();
+                var trimmedLine = line.TrimEnd();
                 if (!origFile.EndOfStream || endWithNewline)
                 {
-                    tempFile.WriteLine(line);
+                    tempFile.WriteLine(trimmedLine);
                 }
                 else
                 {
-                    tempFile.Write(line);
+                    tempFile.Write(trimmedLine);
                 }
             }
         }
