@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="TrimTail/TrimTail.csproj" />
+  <Project Path="TrimTailTests/TrimTailTests.csproj" />
+</Solution>
