@@ -68,7 +68,7 @@ public static class Program
 
         if (args.Length > 0)
         {
-            allowedExts = args.Select(x => x.ToLowerInvariant()).ToHashSet();
+            allowedExts = [.. args.Select(x => x.ToLowerInvariant())];
         }
         else
         {
